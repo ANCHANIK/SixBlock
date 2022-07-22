@@ -3,7 +3,7 @@ import { HeaderStyle } from "../styles/HeaderStyle";
 const CommonHeader = () => {
 
     const Search = (e) => {
-        
+        console.log('header Event',e);
     }
 
 

@@ -20,7 +20,7 @@ export const HeaderStyle = styled.section`
         h1 {
             padding: 0;
             margin-left: 0.5rem;
-            margin-top: -0.3rem;
+            margin-top: .2rem;
             font-size: 30px;
         }
         .search{

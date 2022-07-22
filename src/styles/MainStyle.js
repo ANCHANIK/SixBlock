@@ -22,7 +22,7 @@ export const SelectDateStyle = styled.div`
         &::after{
             position: absolute;
             left: -10px;
-            top: 7px;
+            top: 4px;
             content: "";
             width: 18px;
             height: 18px;
