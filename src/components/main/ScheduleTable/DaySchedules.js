@@ -10,10 +10,16 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 
 const DaySchedules = () => {
 
-    const { inputs, totalData, setClickDay, setDaylistTransform } = useContext(MainContext);
+    const { clickDay, setClickDay, daylistTransform, setDayDataInLocal,
+        setDaylistTransform, setDayState } = useContext(MainContext);
     const [locale, setLocale] = useState('us');
-
     
+        
+    // today default value
+    useEffect(()=>{
+        setDayState([clickDay]);
+    },[])
+
     const onDateClick = (e) => {
         // select date
         let selectYear = e.getFullYear();
@@ -22,22 +28,22 @@ const DaySchedules = () => {
         
         const selectDate = e.toDateString().substr(0, 3);
         const selectYMD = selectYear+selectMonth+selectDay;
+
+        e &&
         setClickDay({
             date: selectDate,
-            YMD: selectYMD
-        });
+            YMD: selectYMD,
+        })
         
-        setDaylistTransform((current) => !current);
-    }
+        let selDate = {
+            date: selectDate,
+            YMD: selectYMD,
+            list: []
+        }
 
-    console.log('DaySchedules inputs : ',inputs);
-    
-    // localStorage, sessionStorage 저장
-    useEffect(() => {
-        // setDayDataInLocal(totalData)
-        // setDayDataInSession(totalData)
-        console.log('바로?');
-    }, [totalData])
+        setDaylistTransform(!daylistTransform);
+        setDayState([selDate]);
+    }
 
 
     return (
@@ -48,15 +54,9 @@ const DaySchedules = () => {
                     locale={locales[locale]}
                     showMonthArrow={false}
                     direction="horizontal"
-
-                    // date={date}
-                    // displayMode={1}
-                    // startDate={date}
-                    // weekdayDisplayFormat='' // 일 월 화 수 목 금 토
                 />
             </div>
             <DatePickView />
-            
         </>
     )
 }
