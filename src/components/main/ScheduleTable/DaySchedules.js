@@ -10,7 +10,7 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 
 const DaySchedules = () => {
 
-    const { clickDay, setClickDay, daylistTransform, setDayDataInLocal,
+    const { clickDay, setClickDay, daylistTransform, setDayDataInLocal, totalData, setTotalData,
         setDaylistTransform, setDayState } = useContext(MainContext);
     const [locale, setLocale] = useState('us');
     
@@ -41,10 +41,19 @@ const DaySchedules = () => {
             list: []
         }
 
+        
+
         setDaylistTransform(!daylistTransform);
         setDayState(selDate);
+
+        totalData.length > 0 ?
+        setTotalData([...totalData,selDate]) :
+        setTotalData([selDate])
     }
 
+    useEffect(() => {
+        console.log('totalData',totalData);
+    }, [totalData]);
 
     return (
         <>
