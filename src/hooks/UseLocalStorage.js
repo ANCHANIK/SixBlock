@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-// SessionStrage 사용 hook
+// LocalStrage 사용 hook
 export const useLocalStorage = (keyName, defaultValue) => {
 
     const [storeValue, setStoreValue] = useState(() => {
