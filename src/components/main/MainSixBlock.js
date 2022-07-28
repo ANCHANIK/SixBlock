@@ -1,14 +1,19 @@
-import { useContext } from "react";
-import { MainContext } from "../../contexts/MainContext";
-import CommonHeader from "../../common/CommonHeader"
-import SchedulesTable from "./SchedulesTable";
+import { useState } from "react";
+import CommonHeader from "../../common/CommonHeader";
+import MainSchedules from "./MainSchedules";
+
+
 
 const MainSixBlock = () => {
+    
 
     return (
         <>
-            <CommonHeader></CommonHeader>
-            <SchedulesTable></SchedulesTable>
+            {/* Header */}
+            <CommonHeader />
+
+            <MainSchedules />
+
         </>
     )
 }
