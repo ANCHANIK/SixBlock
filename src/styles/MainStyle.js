@@ -22,7 +22,7 @@ export const SelectDateStyle = styled.div`
         &::after{
             position: absolute;
             left: -10px;
-            top: 4px;
+            top: 7px;
             content: "";
             width: 18px;
             height: 18px;
@@ -104,28 +104,32 @@ export const DailyStyle = styled.div`
     width: 50%;
     height: 120px;
     box-sizing: border-box;
-    & > div:nth-of-type(1){height: 70%}
-    & > div:nth-of-type(2){height: 30%}
-    textarea{
+    & > form {
         width: 100%;
         height: 100%;
-        padding: 5px;
-        border: none;
-        border: 1px solid #eaeaea;
-        border-bottom: none;
-        resize: none;
-        font-size: 20px;
-        background-color: ${props => `${props.notUse ? '#fff' : '#f1f1f1'}}`};
-        &:focus{
-            outline: none;
+        & > div:nth-of-type(1){height: 70%}
+        & > div:nth-of-type(2){height: 30%}
+        & textarea{
+            width: 100%;
+            height: 100%;
+            padding: 5px;
+            border: none;
+            border: 1px solid #eaeaea;
+            border-bottom: none;
+            resize: none;
+            font-size: 20px;
+            background-color: ${props => `${props.notUse ? '#fff' : '#f1f1f1'}}`};
+            &:focus{
+                outline: none;
+            }
         }
-    }
-    button{
-        width: 50%;
-        height: 100%;
-        background-color: #e7e7e7;
-        &:last-child{
-            background-color: #a5cbff;
+        & button{
+            width: 50%;
+            height: 100%;
+            background-color: #e7e7e7;
+            &:last-child{
+                background-color: #a5cbff;
+            }
         }
     }
 `
