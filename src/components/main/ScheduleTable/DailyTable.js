@@ -1,4 +1,6 @@
+import { Eventcalendar } from "@mobiscroll/react";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
+import { el } from "react-date-range/dist/locale";
 import { MainContext } from "../../../contexts/MainContext";
 import { DailyStyle } from "../../../styles/MainStyle";
 
@@ -7,106 +9,125 @@ import { DailyStyle } from "../../../styles/MainStyle";
 const DailyTable = ({ typeNum }) => {
 
     const {
-        clickDay, inputs, setInputs,
-        dayDataInSession,
-        daylistTransform, setDaylistTransform
+        clickDay, inputs, setInputs, setDayDataInLocal, dayDataInLocal,
+        daylistTransform, setDaylistTransform, totalData, setTotalData,
+        dayState, setDayState
     } = useContext(MainContext);
     
-    const [inputValue, setInputValue] = useState();
-    const [arrValue, setArrValue] = useState([]);
-    const [notUse, setNotUse] = useState(false);
-    const [textEdit, setTextEdit] = useState('Edit');
+    const [textareaValue, setTextareaValue] = useState('');
+    const [inputValue, setInputValue] = useState("");
+    const [isButtonState, setIsButtonState] = useState(false);
 
-    console.log('DailyTable inputs : ',inputs);
 
     // textarea input Event
     const InputData = (e) => {
         const { name, value } = e.target;
         setInputValue(value);
     }
-    
-    // Click Event
-    const EditGoal = (TN) => {
-        setNotUse((current) => !current);
-        setDaylistTransform((current) => !current)
-        if (notUse) {
-            !inputValue ||
-            setInputs(
-                {
-                    'code': TN,
-                    'content': inputValue
-                }
-            )
+
+
+    // 수정완료 Submit Event
+    const onSubmit = (e) => {
+        e.preventDefault();
+        setIsButtonState(!isButtonState);
+        setDaylistTransform(!daylistTransform);
+        
+        if(dayState && inputValue){
+            dayState.map(el => el.YMD === clickDay.YMD && (
+                el.list.length === 0 ? (
+                    setDayState([
+                        {
+                            ...el,
+                            list : [
+                                {
+                                    code: typeNum,
+                                    content: inputValue
+                                }
+                            ]
+                        }
+                    ])
+                )
+                :
+                setDayState([
+                    {
+                        ...el,
+                        list : 
+                        el.list.find(type => type.code === typeNum) ?
+                        //존재하는 코드인 경우 list 안에서 찾기
+                        el.list.map(type => type.code === typeNum ?                            
+                            {
+                                ...type,
+                                content: inputValue
+                            }
+                            : type)
+                        : //존재하지 않는 코드의 경우 list 새로 생성
+                        [
+                            ...el.list,
+                            {
+                                code: typeNum,
+                                content: inputValue
+                            }
+                        ]
+                    }
+                ])
+                    
+            ))  
         }
+
+    }
+    
+
+    // 수정 Button Event
+    const onClick = (e) => {
+        e.preventDefault();
+        setIsButtonState(!isButtonState);
     }
 
-    // edit 버튼 state에 따른 버튼 Edit || OK  변화
-    useEffect(() => {notUse ? setTextEdit('OK'):setTextEdit('Edit')},[notUse])
+    // 성공 button event
+    const successBtn = (e) => {
+        e.preventDefault();
+    }
 
-    
+
     // 날짜 클릭시 해당 data 출력
     useEffect(() => {
-        setNotUse(false);
-        setArrValue([]);
+
         
-        console.log('clickDay',clickDay)
-        dayDataInSession !== null ? (
-            dayDataInSession.find(date => date.date === clickDay.YMD ? (
-                // dayDataInLocal.date === 선택한 날짜가 같으면 실행
-                setArrValue(date.list),
-                console.log('ArrValue',date.list),
-                console.log('dayDataInSession',dayDataInSession),
-                console.log('찾음'),
-                console.log('notUse',notUse)
+    }, [daylistTransform]);
+    
+    useEffect(() => {
 
-                ) : (
-                    // 다른 날짜 선택
-                setArrValue([]),
-                console.log('못찾음'),
-                console.log('arrValue못찾',arrValue)
-                // setDayDataInLocal(totalData),
-                // setDayDataInSession(totalData)
-            ))
-        ) : (
-            // 데이터 없음
-            console.log('데이터 없음')
-            // setDayDataInLocal(totalData),
-            // setDayDataInSession(totalData)
-        )
+    }, [dayState, daylistTransform, dayDataInLocal]);
 
-    }, [clickDay]);
 
 
     return (
-        <DailyStyle notUse={notUse}>
-
-            <div>
-                {
-                    notUse ? (
-                        <textarea
-                            onChange={InputData}
-                            value={inputValue}
-                            name={typeNum}
-                        />
-                    ) : (
-                        <textarea
-                        value={
-                            arrValue === [] ? (
-                                ''
+        <DailyStyle notUse={isButtonState}>
+            <form onSubmit={onSubmit}>
+                <div>
+                    {
+                        isButtonState ? (
+                            <textarea
+                                onChange={InputData}
+                                value={inputValue}
+                                name={typeNum}
+                            />
+                        ) : (
+                            <textarea value={textareaValue} name={typeNum} disabled/>
+                        )
+                    }
+                </div>
+                <div>
+                    <button onClick={successBtn}>Success</button>
+                    {
+                        isButtonState ? (
+                            <button>OK</button>
                             ) : (
-                                arrValue.find(val => val.code === typeNum && (
-                                    arrValue.content
-                                ))
-                            )
-                        }
-                        disabled />
-                    )
-                }
-            </div>
-            <div>
-                <button>Success</button>
-                <button onClick={() => EditGoal(typeNum)}>{textEdit}</button>
-            </div>
+                            <button onClick={onClick}>Edit</button>
+                        )
+                    }
+                </div>
+            </form>
             
         </DailyStyle>
     )
