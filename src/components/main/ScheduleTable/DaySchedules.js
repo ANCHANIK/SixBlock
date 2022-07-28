@@ -42,7 +42,7 @@ const DaySchedules = () => {
         }
 
         setDaylistTransform(!daylistTransform);
-        setDayState([selDate]);
+        setDayState(selDate);
     }
 
 
