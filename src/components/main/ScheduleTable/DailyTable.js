@@ -33,25 +33,53 @@ const DailyTable = ({ typeNum }) => {
         setDaylistTransform(!daylistTransform);
         
         if(dayState && inputValue){
-            dayState.map(el => el.YMD === clickDay.YMD && (
-                el.list.length === 0 ? (
-                    setDayState([
+            // 하루 단위 
+            setDayState(
+                {
+                    ...dayState,
+                    list:
+                    dayState.list.length === 0 ?
+                    [
                         {
-                            ...el,
-                            list : [
-                                {
-                                    code: typeNum,
-                                    content: inputValue
-                                }
-                            ]
+                            code: typeNum,
+                            content: inputValue
                         }
-                    ])
-                )
-                :
-                setDayState([
+                    ]
+                    :
+                    dayState.list.find(type => type.code === typeNum) ?
+                    //존재하는 코드인 경우 list 안에서 찾기
+                    dayState.list.map(type => type.code === typeNum ?
+                        {
+                            ...type,
+                            content: inputValue
+                        }
+                        : type)
+                    : //존재하지 않는 코드의 경우 list 새로 생성
+                    [
+                        ...dayState.list,
+                        {
+                            code: typeNum,
+                            content: inputValue
+                        }
+                    ]
+                }
+            )
+
+
+            // 날짜별 전체 데이터 대입
+            totalData.map(el => el.YMD === clickDay.YMD && (
+                setTotalData([
                     {
                         ...el,
-                        list : 
+                        list :
+                        el.list.length === 0 ?
+                        [
+                            {
+                                code: typeNum,
+                                content: inputValue
+                            }
+                        ]
+                        :
                         el.list.find(type => type.code === typeNum) ?
                         //존재하는 코드인 경우 list 안에서 찾기
                         el.list.map(type => type.code === typeNum ?                            
@@ -70,10 +98,8 @@ const DailyTable = ({ typeNum }) => {
                         ]
                     }
                 ])
-                    
             ))  
         }
-
     }
     
 
@@ -91,13 +117,19 @@ const DailyTable = ({ typeNum }) => {
 
     // 날짜 클릭시 해당 data 출력
     useEffect(() => {
-
+        // console.log('total',totalData);
+        // setDayState([])
+        setInputValue("")
         
+        console.log('dayState',dayState);
     }, [daylistTransform]);
     
     useEffect(() => {
-
-    }, [dayState, daylistTransform, dayDataInLocal]);
+        // dayState !== [] ||
+        // setTotalData(...totalData,[dayState])
+        dayState.length > 0 && dayState.list.length &&
+        dayState.list.map(con => console.log('con',con.content))
+    }, [daylistTransform]);
 
 
 
@@ -113,7 +145,14 @@ const DailyTable = ({ typeNum }) => {
                                 name={typeNum}
                             />
                         ) : (
-                            <textarea value={textareaValue} name={typeNum} disabled/>
+                            <textarea
+                                value={
+                                    
+                                    textareaValue
+                                }
+                                name={typeNum}
+                                disabled
+                            />
                         )
                     }
                 </div>
