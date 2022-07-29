@@ -3,14 +3,14 @@ import { MainContext } from "../../../contexts/MainContext";
 import { WeeklyTableStyle } from "../../../styles/MainStyle";
 
 const WeekSchedules = () => {
-    const { data } = useContext(MainContext);
+    const { totalData } = useContext(MainContext);
 
-    console.log('data',data.length);
+    console.log('totalData',totalData.length);
 
     return (
         <>
             {
-                data.length > 0 ? (
+                totalData.length > 0 ? (
                     <WeeklyTableStyle>
                         <colgroup>
                             <col style={{ width: "10%" }} />
