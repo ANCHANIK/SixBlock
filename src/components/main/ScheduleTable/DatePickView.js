@@ -4,9 +4,9 @@ import DailyTable from "./DailyTable";
 
 const DatePickView = () => {
 
-    const { totalData, inputs, clickDay, setTotalData, dayDataInLocal , setDayDataInLocal } = useContext(MainContext);
+    const {  } = useContext(MainContext);
 
-
+    
     
     return (
         <>
