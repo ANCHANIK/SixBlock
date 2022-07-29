@@ -9,7 +9,6 @@ import { DailyStyle } from "../../../styles/MainStyle";
 const DailyTable = ({ typeNum }) => {
 
     const {
-        clickDay, inputs, setInputs, setDayDataInLocal, dayDataInLocal,
         daylistTransform, setDaylistTransform, totalData, setTotalData,
         dayState, setDayState
     } = useContext(MainContext);
@@ -24,6 +23,7 @@ const DailyTable = ({ typeNum }) => {
         const { name, value } = e.target;
         setInputValue(value);
     }
+
 
 
     // 수정완료 Submit Event
@@ -64,41 +64,6 @@ const DailyTable = ({ typeNum }) => {
                     ]
                 }
             )
-
-
-            // 날짜별 전체 데이터 대입
-            totalData.map(el => el.YMD === clickDay.YMD && (
-                setTotalData([
-                    {
-                        ...el,
-                        list :
-                        el.list.length === 0 ?
-                        [
-                            {
-                                code: typeNum,
-                                content: inputValue
-                            }
-                        ]
-                        :
-                        el.list.find(type => type.code === typeNum) ?
-                        //존재하는 코드인 경우 list 안에서 찾기
-                        el.list.map(type => type.code === typeNum ?                            
-                            {
-                                ...type,
-                                content: inputValue
-                            }
-                            : type)
-                        : //존재하지 않는 코드의 경우 list 새로 생성
-                        [
-                            ...el.list,
-                            {
-                                code: typeNum,
-                                content: inputValue
-                            }
-                        ]
-                    }
-                ])
-            ))  
         }
     }
     
@@ -115,22 +80,39 @@ const DailyTable = ({ typeNum }) => {
     }
 
 
-    // 날짜 클릭시 해당 data 출력
     useEffect(() => {
-        // console.log('total',totalData);
-        // setDayState([])
+        setTextareaValue("")
         setInputValue("")
         
-        console.log('dayState',dayState);
-    }, [daylistTransform]);
-    
-    useEffect(() => {
-        // dayState !== [] ||
-        // setTotalData(...totalData,[dayState])
-        dayState.length > 0 && dayState.list.length &&
-        dayState.list.map(con => console.log('con',con.content))
+        if(dayState && dayState.list) {
+            
+            dayState.list.map(con => con.code === typeNum ?
+                setTextareaValue(con.content)
+            :
+                null
+            )
+        }
+
     }, [daylistTransform]);
 
+    
+    // 날짜 클릭시 해당 data 출력
+    useEffect(() => {
+
+        totalData.length > 0 &&
+        setTotalData(
+            totalData.map(data => data.YMD === dayState.YMD ?
+                
+                {
+                    ...data,
+                    list : dayState.list
+                }
+                
+            :
+            data
+            )
+        )
+    }, [dayState]);
 
 
     return (
@@ -146,10 +128,7 @@ const DailyTable = ({ typeNum }) => {
                             />
                         ) : (
                             <textarea
-                                value={
-                                    
-                                    textareaValue
-                                }
+                                value={textareaValue}
                                 name={typeNum}
                                 disabled
                             />
