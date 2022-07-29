@@ -1,5 +1,7 @@
+
 import styled from "styled-components";
 import icoArrowDrop from "../assets/img/ico/ico_arrowDrop.svg"
+
 
 export const MainScheduleStyle = styled.section`
     margin-top: 25px !important;
