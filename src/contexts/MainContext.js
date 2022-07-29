@@ -45,8 +45,6 @@ const MainProvider = (props) => {
             dayDataInSession, setDayDataInSession,
             daylistTransform, setDaylistTransform,
             dayState, setDayState
-            // getTotalData, setGetTotalData,
-
         }),
         [
             selectDate, setSelectDate, clickDay, setClickDay,
@@ -55,7 +53,6 @@ const MainProvider = (props) => {
             dayDataInSession, setDayDataInSession,
             daylistTransform, setDaylistTransform,
             dayState, setDayState
-            // getTotalData, setGetTotalData,
         ]
     )
 
